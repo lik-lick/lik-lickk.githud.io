@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园生活助手 - 高校学生生活服务工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, #4a6fa5 0%, #2c3e50 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+
+        /* 导航样式 */
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 主内容区样式 */
+        main {
+            min-height: calc(100vh - 180px);
+            padding: 30px 0;
+        }
+
+        .module {
+            display: none;
+        }
+
+        .module.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .module-header {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .module-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        /* 卡片样式 */
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 按钮样式 */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background-color: #4a6fa5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a5985;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #4a6fa5;
+            outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* 通知模块 */
+        .notice-item {
+            padding: 15px;
+            border-left: 4px solid #4a6fa5;
+            margin-bottom: 15px;
+            background-color: #f9fafc;
+        }
+
+        .notice-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .notice-date {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .notice-content {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* 失物招领模块 */
+        .lost-found-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background-color: white;
+        }
+
+        .item-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-info h4 {
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .item-type {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 10px;
+        }
+
+        .item-type.lost {
+            background-color: #ffeaa7;
+            color: #e17055;
+        }
+
+        .item-type.found {
+            background-color: #a5d6a7;
+            color: #2e7d32;
+        }
+
+        .contact-info {
+            font-size: 0.9rem;
+            color: #4a6fa5;
+            margin-top: 5px;
+        }
+
+        /* 二手交易模块 */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .product-img {
+            height: 180px;
+            background-color: #f1f3f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 3rem;
+        }
+
+        .product-body {
+            padding: 15px;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
+        .product-category {
+            display: inline-block;
+            padding: 3px 10px;
+            background-color: #e8f4fd;
+            color: #4a6fa5;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .product-desc {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        /* 课表查询模块 */
+        .timetable-search {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .timetable-container {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .timetable-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+
+        .week-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timetable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .timetable th {
+            background-color: #4a6fa5;
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .timetable td {
+            padding: 15px 10px;
+            text-align: center;
+            border: 1px solid #eee;
+            vertical-align: top;
+            height: 120px;
+        }
+
+        .course-item {
+            background-color: #e8f4fd;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-left: 4px solid #4a6fa5;
+        }
+
+        .course-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .course-detail {
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        /* 空状态提示 */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #6c757d;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background-color: #2c3e50;
+            color: #bdc3c7;
+            padding: 25px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .search-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .timetable {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">🎓</div>
+                    <h1>校园生活助手</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="nav-link active" data-module="notices">校园通知</a></li>
+                        <li><a href="#" class="nav-link" data-module="lostFound">失物招领</a></li>
+                        <li><a href="#" class="nav-link" data-module="secondhand">二手交易</a></li>
+                        <li><a href="#" class="nav-link" data-module="timetable">课表查询</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- 校园通知模块 -->
+            <section id="notices" class="module active">
+                <div class="module-header">
+                    <h2 class="module-title">校园通知</h2>
+                    <button class="btn btn-primary" id="addNoticeBtn">发布新通知</button>
+                </div>
+                
+                <div class="filter-group">
+                    <select id="noticeSort" class="filter-select">
+                        <option value="newest">按发布时间排序（最新）</option>
+                        <option value="oldest">按发布时间排序（最早）</option>
+                    </select>
+                </div>
+                
+                <div id="noticesList">
+                    <!-- 通知列表将通过JS动态生成 -->
+                </div>
+            </section>
+
+            <!-- 失物招领模块 -->
+            <section id="lostFound" class="module">
+                <div class="module-header">
+                    <h2 class="module-title">失物招领</h2>
+                    <div class="lost-found-actions">
+                        <button class="btn btn-primary" id="addLostBtn">发布丢失信息</button>
+                        <button class="btn btn-success" id="addFoundBtn">发布拾物信息</button>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <select id="itemTypeFilter" class="filter-select">
+                        <option value="all">全部类型</option>
+                        <option value="card">卡证类</option>
+                        <option value="electronic">电子产品</option>
+                        <option value="book">书籍文具</option>
+                        <option value="clothing">衣物饰品</option>
+                        <option value="other">其他物品</option>
+                    </select>
+                    
+                    <select id="statusFilter" class="filter-select">
+                        <option value="all">全部状态</option>
+                        <option value="lost">丢失</option>
+                        <option value="found">拾到</option>
+                    </select>
+                </div>
+                
+                <div id="lostFoundList">
+                    <!-- 失物招领列表将通过JS动态生成 -->
+                </div>
+            </section>
+
+            <!-- 二手交易模块 -->
+            <section id="secondhand" class="module">
+                <div class="module-header">
+                    <h2 class="module-title">二手交易</h2>
+                    <button class="btn btn-primary" id="addProductBtn">发布商品</button>
+                </div>
+                
+                <div class="filter-group">
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="all">全部分类</option>
+                        <option value="book">书籍资料</option>
+                        <option value="electronic">电子产品</option>
+                        <option value="daily">生活用品</option>
+                        <option value="clothing">服装鞋帽</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                
+                <div class="product-grid" id="productList">
+                    <!-- 商品列表将通过JS动态生成 -->
+                </div>
+            </section>
+
+            <!-- 课表查询模块 -->
+            <section id="timetable" class="module">
+                <div class="module-header">
+                    <h2 class="module-title">课表查询</h2>
+                </div>
+                
+                <div class="timetable-search">
+                    <div class="search-form">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="studentId" class="form-label">学号/选择年级专业</label>
+                            <input type="text" id="studentId" class="form-control" placeholder="请输入学号或选择年级专业">
+                        </div>
+                        
+                        <div class="form-group" style="flex: 1;">
+                            <label for="majorSelect" class="form-label">年级专业</label>
+                            <select id="majorSelect" class="form-control">
+                                <option value="">请选择年级专业</option>
+                                <option value="cs2021">计算机科学 2021级</option>
+                                <option value="cs2022">计算机科学 2022级</option>
+                                <option value="se2021">软件工程 2021级</option>
+                                <option value="se2022">软件工程 2022级</option>
+                                <option value="ai2021">人工智能 2021级</option>
+                                <option value="ai2022">人工智能 2022级</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button class="btn btn-primary" id="searchTimetable">查询课表</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timetable-container">
+                    <div class="timetable-header">
+                        <div>
+                            <h3 id="currentWeek">第 1 周课表</h3>
+                            <p id="timetableInfo" class="contact-info"></p>
+                        </div>
+                        <div class="week-nav">
+                            <button class="btn btn-secondary" id="prevWeek">上一周</button>
+                            <button class="btn btn-secondary" id="nextWeek">下一周</button>
+                            <button class="btn btn-primary" id="currentWeekBtn">本周</button>
+                        </div>
+                    </div>
+                    
+                    <div id="timetableContent">
+                        <!-- 课表内容将通过JS动态生成 -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 模态框（用于表单） -->
+    <div id="modalOverlay" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background-color: white; border-radius: 10px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-header" style="padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0;" id="modalTitle">模态框标题</h3>
+                <button id="closeModal" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6c757d;">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 20px;" id="modalBody">
+                <!-- 模态框内容将通过JS动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2023 校园生活助手 - 高校学生轻量化生活服务工具</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">本工具为本地应用，数据存储于浏览器中，请勿清除浏览器缓存</p>
+        </div>
+    </footer>
+
+    <script>
+        // 数据存储结构设计
+        const StorageKeys = {
+            NOTICES: 'campus_notices',
+            LOST_FOUND: 'lost_found_items',
+            SECONDHAND: 'secondhand_products',
+            TIMETABLE: 'timetable_data',
+            CURRENT_WEEK: 'current_week'
+        };
+
+        // 初始数据
+        const initialData = {
+            notices: [
+                {
+                    id: 1,
+                    title: "关于2023年秋季学期开学安排的通知",
+                    content: "根据学校安排，2023年秋季学期将于9月4日正式开学。请各位同学按时返校，并做好开学准备工作。具体课程安排请关注教务处通知。",
+                    date: "2023-08-25 09:30",
+                    publisher: "教务处"
+                },
+                {
+                    id: 2,
+                    title: "图书馆系统升级维护通知",
+                    content: "图书馆管理系统将于8月28日(周一) 00:00至06:00进行系统升级维护，期间图书馆网站、借还书系统将暂停服务。请各位读者提前安排好借阅计划。",
+                    date: "2023-08-24 14:15",
+                    publisher: "图书馆"
+                },
+                {
+                    id: 3,
+                    title: "校园网无线网络优化完成",
+                    content: "校园无线网络优化升级工作已完成，现已覆盖全校主要教学楼、图书馆、食堂及宿舍区域。使用指南请访问网络中心网站查看。",
+                    date: "2023-08-23 16:45",
+                    publisher: "网络中心"
+                }
+            ],
+            lostFound: [
+                {
+                    id: 1,
+                    type: "lost",
+                    itemName: "校园一卡通",
+                    itemCategory: "card",
+                    description: "8月25日在二食堂遗失，卡号尾号0321，姓名张三",
+                    contact: "李同学 138****5678",
+                    date: "2023-08-25 12:30",
+                    location: "二食堂"
+                },
+                {
+                    id: 2,
+                    type: "found",
+                    itemName: "黑色华为手机",
+                    itemCategory: "electronic",
+                    description: "8月24日在图书馆三楼自习室拾到，黑色华为手机，有蓝色手机壳",
+                    contact: "王同学 139****1234",
+                    date: "2023-08-24 20:15",
+                    location: "图书馆三楼"
+                },
+                {
+                    id: 3,
+                    type: "lost",
+                    itemName: "《数据结构》教材",
+                    itemCategory: "book",
+                    description: "8月23日在教学楼A座302教室遗失，书内有姓名和学号",
+                    contact: "赵同学 137****9876",
+                    date: "2023-08-23 18:45",
+                    location: "教学楼A座302"
+                }
+            ],
+            secondhand: [
+                {
+                    id: 1,
+                    name: "九成新Java编程思想",
+                    price: 35,
+                    category: "book",
+                    description: "第五版，几乎全新，无笔记无划痕，适合计算机专业同学",
+                    contact: "刘同学 135****3344",
+                    date: "2023-08-25",
+                    image: "📚"
+                },
+                {
+                    id: 2,
+                    name: "便携式蓝牙键盘",
+                    price: 80,
+                    category: "electronic",
+                    description: "黑色，可折叠，适合平板和手机使用，使用不到半年",
+                    contact: "陈同学 136****5566",
+                    date: "2023-08-24",
+                    image: "⌨️"
+                },
+                {
+                    id: 3,
+                    name: " dormitory台灯",
+                    price: 25,
+                    category: "daily",
+                    description: "LED护眼台灯，三档调光，白色，功能完好",
+                    contact: "孙同学 138****7788",
+                    date: "2023-08-23",
+                    image: "💡"
+                }
+            ],
+            timetable: {
+                "cs2021": {
+                    name: "计算机科学 2021级",
+                    weeks: [
+                        // 第1周
+                        [
+                            // 周一
+                            [
+                                { name: "数据结构", teacher: "张教授", classroom: "教学楼A201", time: "1-2节" },
+                                { name: "计算机组成原理", teacher: "李教授", classroom: "教学楼B102", time: "3-4节" }
+                            ],
+                            // 周二
+                            [
+                                { name: "大学英语", teacher: "王老师", classroom: "外语楼305", time: "1-2节" },
+                                { name: "操作系统", teacher: "刘教授", classroom: "实验楼501", time: "5-6节" }
+                            ],
+                            // 周三
+                            [
+                                { name: "算法设计与分析", teacher: "陈教授", classroom: "教学楼A301", time: "3-4节" }
+                            ],
+                            // 周四
+                            [
+                                { name: "数据库原理", teacher: "赵教授", classroom: "教学楼B205", time: "1-2节" },
+                                { name: "体育", teacher: "孙老师", classroom: "体育馆", time: "5-6节" }
+                            ],
+                            // 周五
+                            [
+                                { name: "计算机网络", teacher: "周教授", classroom: "实验楼402", time: "3-4节" }
+                            ],
+                            // 周六
+                            [],
+                            // 周日
+                            []
+                        ],
+                        // 第2周（简化，实际应有不同）
+                        [
+                            [{ name: "数据结构", teacher: "张教授", classroom: "教学楼A201", time: "1-2节" }],
+                            [{ name: "计算机组成原理", teacher: "李教授", classroom: "教学楼B102", time: "3-4节" }],
+                            [{ name: "大学英语", teacher: "王老师", classroom: "外语楼305", time: "1-2节" }],
+                            [{ name: "操作系统", teacher: "刘教授", classroom: "实验楼501", time: "5-6节" }],
+                            [{ name: "算法设计与分析", teacher: "陈教授", classroom: "教学楼A301", time: "3-4节" }],
+                            [],
+                            []
+                        ]
+                    ]
+                },
+                "cs2022": {
+                    name: "计算机科学 2022级",
+                    weeks: [
+                        // 第1周
+                        [
+                            [{ name: "高等数学", teacher: "杨教授", classroom: "教学楼C101", time: "1-2节" }],
+                            [{ name: "C语言程序设计", teacher: "吴教授", classroom: "实验楼301", time: "3-4节" }],
+                            [{ name: "大学英语", teacher: "王老师", classroom: "外语楼305", time: "1-2节" }],
+                            [{ name: "离散数学", teacher: "郑教授", classroom: "教学楼A102", time: "5-6节" }],
+                            [{ name: "体育", teacher: "孙老师", classroom: "体育馆", time: "3-4节" }],
+                            [],
+                            []
+                        ]
+                    ]
+                }
+            }
+        };
+
+        // 工具函数：获取本地存储数据
+        function getStorageData(key, defaultValue = []) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : defaultValue;
+        }
+
+        // 工具函数：保存数据到本地存储
+        function saveStorageData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        // 工具函数：初始化数据
+        function initializeData() {
+            // 检查是否有数据，如果没有则初始化
+            if (!localStorage.getItem(StorageKeys.NOTICES)) {
+                saveStorageData(StorageKeys.NOTICES, initialData.notices);
+            }
+            
+            if (!localStorage.getItem(StorageKeys.LOST_FOUND)) {
+                saveStorageData(StorageKeys.LOST_FOUND, initialData.lostFound);
+            }
+            
+            if (!localStorage.getItem(StorageKeys.SECONDHAND)) {
+                saveStorageData(StorageKeys.SECONDHAND, initialData.secondhand);
+            }
+            
+            if (!localStorage.getItem(StorageKeys.TIMETABLE)) {
+                saveStorageData(StorageKeys.TIMETABLE, initialData.timetable);
+            }
+            
+            if (!localStorage.getItem(StorageKeys.CURRENT_WEEK)) {
+                saveStorageData(StorageKeys.CURRENT_WEEK, 1);
+            }
+        }
+
+        // 模块管理
+        class ModuleManager {
+            constructor() {
+                this.modules = document.querySelectorAll('.module');
+                this.navLinks = document.querySelectorAll('.nav-link');
+                this.currentModule = 'notices';
+                
+                this.initNavigation();
+                this.showModule(this.currentModule);
+            }
+            
+            initNavigation() {
+                this.navLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const moduleId = link.getAttribute('data-module');
+                        this.switchModule(moduleId);
+                    });
+                });
+            }
+            
+            switchModule(moduleId) {
+                // 更新导航状态
+                this.navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-module') === moduleId) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // 显示对应模块
+                this.showModule(moduleId);
+                this.currentModule = moduleId;
+            }
+            
+            showModule(moduleId) {
+                this.modules.forEach(module => {
+                    if (module.id === moduleId) {
+                        module.classList.add('active');
+                    } else {
+                        module.classList.remove('active');
+                    }
+                });
+            }
+        }
+
+        // 校园通知模块
+        class NoticesModule {
+            constructor() {
+                this.noticesList = document.getElementById('noticesList');
+                this.addNoticeBtn = document.getElementById('addNoticeBtn');
+                this.noticeSort = document.getElementById('noticeSort');
+                
+                this.init();
+            }
+            
+            init() {
+                this.renderNotices();
+                
+                // 添加事件监听
+                this.addNoticeBtn.addEventListener('click', () => this.showAddNoticeForm());
+                this.noticeSort.addEventListener('change', () => this.renderNotices());
+            }
+            
+            renderNotices() {
+                const notices = getStorageData(StorageKeys.NOTICES);
+                const sortBy = this.noticeSort.value;
+                
+                // 排序
+                const sortedNotices = [...notices].sort((a, b) => {
+                    const dateA = new Date(a.date);
+                    const dateB = new Date(b.date);
+                    return sortBy === 'newest' ? dateB - dateA : dateA - dateB;
+                });
+                
+                // 清空列表
+                this.noticesList.innerHTML = '';
+                
+                if (sortedNotices.length === 0) {
+                    this.noticesList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📢</div>
+                            <h3>暂无通知</h3>
+                            <p>点击"发布新通知"按钮添加第一条校园通知</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 渲染通知列表
+                sortedNotices.forEach(notice => {
+                    const noticeElement = document.createElement('div');
+                    noticeElement.className = 'card notice-item';
+                    noticeElement.innerHTML = `
+                        <div class="notice-title">${notice.title}</div>
+                        <div class="notice-date">发布时间：${notice.date} | 发布者：${notice.publisher}</div>
+                        <div class="notice-content">${notice.content}</div>
+                    `;
+                    this.noticesList.appendChild(noticeElement);
+                });
+            }
+            
+            showAddNoticeForm() {
+                const modalTitle = document.getElementById('modalTitle');
+                const modalBody = document.getElementById('modalBody');
+                const modalOverlay = document.getElementById('modalOverlay');
+                
+                modalTitle.textContent = '发布新通知';
+                modalBody.innerHTML = `
+                    <form id="noticeForm">
+                        <div class="form-group">
+                            <label for="noticeTitle" class="form-label">通知标题</label>
+                            <input type="text" id="noticeTitle" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="noticePublisher" class="form-label">发布者</label>
+                            <input type="text" id="noticePublisher" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="noticeContent" class="form-label">通知内容</label>
+                            <textarea id="noticeContent" class="form-control" required></textarea>
+                        </div>
+                        <div class="form-group" style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" class="btn btn-secondary" id="cancelNotice">取消</button>
+                            <button type="submit" class="btn btn-primary">发布通知</button>
+                        </div>
+                    </form>
+                `;
+                
+                modalOverlay.style.display = 'flex';
+                
+                // 表单提交事件
+                document.getElementById('noticeForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addNotice();
+                });
+                
+                // 取消按钮事件
+                document.getElementById('cancelNotice').addEventListener('click', () => {
+                    modalOverlay.style.display = 'none';
+                });
+            }
+            
+            addNotice() {
+                const title = document.getElementById('noticeTitle').value;
+                const publisher = document.getElementById('noticePublisher').value;
+                const content = document.getElementById('noticeContent').value;
+                
+                if (!title || !publisher || !content) {
+                    alert('请填写所有必填字段');
+                    return;
+                }
+                
+                // 获取现有通知
+                const notices = getStorageData(StorageKeys.NOTICES);
+                
+                // 创建新通知
+                const newNotice = {
+                    id: notices.length > 0 ? Math.max(...notices.map(n => n.id)) + 1 : 1,
+                    title,
+                    content,
+                    publisher,
+                    date: new Date().toLocaleString('zh-CN', { 
+                        year: 'numeric', 
+                        month: '2-digit', 
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })
+                };
+                
+                // 添加到数组并保存
+                notices.unshift(newNotice);
+                saveStorageData(StorageKeys.NOTICES, notices);
+                
+                // 关闭模态框
+                document.getElementById('modalOverlay').style.display = 'none';
+                
+                // 重新渲染列表
+                this.renderNotices();
+            }
+        }
+
+        // 失物招领模块
+        class LostFoundModule {
+            constructor() {
+                this.lostFoundList = document.getElementById('lostFoundList');
+                this.addLostBtn = document.getElementById('addLostBtn');
+                this.addFoundBtn = document.getElementById('addFoundBtn');
+                this.itemTypeFilter = document.getElementById('itemTypeFilter');
+                this.statusFilter = document.getElementById('statusFilter');
+                
+                this.init();
+            }
+            
+            init() {
+                this.renderItems();
+                
+                // 添加事件监听
+                this.addLostBtn.addEventListener('click', () => this.showAddForm('lost'));
+                this.addFoundBtn.addEventListener('click', () => this.showAddForm('found'));
+                this.itemTypeFilter.addEventListener('change', () => this.renderItems());
+                this.statusFilter.addEventListener('change', () => this.renderItems());
+            }
+            
+            renderItems() {
+                const items = getStorageData(StorageKeys.LOST_FOUND);
+                const typeFilter = this.itemTypeFilter.value;
+                const statusFilter = this.statusFilter.value;
+                
+                // 过滤
+                let filteredItems = items;
+                
+                if (typeFilter !== 'all') {
+                    filteredItems = filteredItems.filter(item => item.itemCategory === typeFilter);
+                }
+                
+                if (statusFilter !== 'all') {
+                    filteredItems = filteredItems.filter(item => item.type === statusFilter);
+                }
+                
+                // 按时间倒序排序
+                filteredItems.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // 清空列表
+                this.lostFoundList.innerHTML = '';
+                
+                if (filteredItems.length === 0) {
+                    this.lostFoundList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🔍</div>
+                            <h3>暂无信息</h3>
+                            <p>点击上方按钮发布失物或招领信息</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 渲染列表
+                filteredItems.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'card item-card';
+                    
+                    const typeText = item.type === 'lost' ? '丢失' : '拾到';
+                    const typeClass = item.type === 'lost' ? 'lost' : 'found';
+                    
+                    // 物品类型映射
+                    const categoryMap = {
+                        'card': '卡证类',
+                        'electronic': '电子产品',
+                        'book': '书籍文具',
+                        'clothing': '衣物饰品',
+                        'other': '其他物品'
+                    };
+                    
+                    itemElement.innerHTML = `
+                        <div class="item-info">
+                            <h4>${item.itemName}</h4>
+                            <div>
+                                <span class="item-type ${typeClass}">${typeText}</span>
+                                <span>${categoryMap[item.itemCategory] || item.itemCategory}</span>
+                            </div>
+                            <p>${item.description}</p>
+                            <p>时间：${item.date} | 地点：${item.location}</p>
+                            <div class="contact-info">联系方式：${item.contact}</div>
+                        </div>
+                    `;
+                    
+                    this.lostFoundList.appendChild(itemElement);
+                });
+            }
+            
+            showAddForm(type) {
+                const modalTitle = document.getElementById('modalTitle');
+                const modalBody = document.getElementById('modalBody');
+                const modalOverlay = document.getElementById('modalOverlay');
+                
+                const formTitle = type === 'lost' ? '发布丢失信息' : '发布拾物信息';
+                modalTitle.textContent = formTitle;
+                
+                modalBody.innerHTML = `
+                    <form id="itemForm">
+                        <div class="form-group">
+                            <label for="itemName" class="form-label">物品名称</label>
+                            <input type="text" id="itemName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemCategory" class="form-label">物品类型</label>
+                            <select id="itemCategory" class="form-control" required>
+                                <option value="">请选择物品类型</option>
+                                <option value="card">卡证类</option>
+                                <option value="electronic">电子产品</option>
+                                <option value="book">书籍文具</option>
+                                <option value="clothing">衣物饰品</option>
+                                <option value="other">其他物品</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemDescription" class="form-label">描述信息</label>
+                            <textarea id="itemDescription" class="form-control" required placeholder="请描述物品特征、丢失/拾到地点等详细信息"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemLocation" class="form-label">${type === 'lost' ? '丢失地点' : '拾到地点'}</label>
+                            <input type="text" id="itemLocation" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemContact" class="form-label">联系方式</label>
+                            <input type="text" id="itemContact" class="form-control" required placeholder="电话/微信/QQ等">
+                        </div>
+                        <input type="hidden" id="itemType" value="${type}">
+                        <div class="form-group" style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" class="btn btn-secondary" id="cancelItem">取消</button>
+                            <button type="submit" class="btn btn-primary">发布信息</button>
+                        </div>
+                    </form>
+                `;
+                
+                modalOverlay.style.display = 'flex';
+                
+                // 表单提交事件
+                document.getElementById('itemForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addItem(type);
+                });
+                
+                // 取消按钮事件
+                document.getElementById('cancelItem').addEventListener('click', () => {
+                    modalOverlay.style.display = 'none';
+                });
+            }
+            
+            addItem(type) {
+                const itemName = document.getElementById('itemName').value;
+                const itemCategory = document.getElementById('itemCategory').value;
+                const itemDescription = document.getElementById('itemDescription').value;
+                const itemLocation = document.getElementById('itemLocation').value;
+                const itemContact = document.getElementById('itemContact').value;
+                
+                if (!itemName || !itemCategory || !itemDescription || !itemLocation || !itemContact) {
+                    alert('请填写所有必填字段');
+                    return;
+                }
+                
+                // 获取现有数据
+                const items = getStorageData(StorageKeys.LOST_FOUND);
+                
+                // 创建新记录
+                const newItem = {
+                    id: items.length > 0 ? Math.max(...items.map(item => item.id)) + 1 : 1,
+                    type,
+                    itemName,
+                    itemCategory,
+                    description: itemDescription,
+                    contact: itemContact,
+                    location: itemLocation,
+                    date: new Date().toLocaleString('zh-CN', { 
+                        year: 'numeric', 
+                        month: '2-digit', 
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })
+                };
+                
+                // 添加到数组并保存
+                items.unshift(newItem);
+                saveStorageData(StorageKeys.LOST_FOUND, items);
+                
+                // 关闭模态框
+                document.getElementById('modalOverlay').style.display = 'none';
+                
+                // 重新渲染列表
+                this.renderItems();
+            }
+        }
+
+        // 二手交易模块
+        class SecondhandModule {
+            constructor() {
+                this.productList = document.getElementById('productList');
+                this.addProductBtn = document.getElementById('addProductBtn');
+                this.categoryFilter = document.getElementById('categoryFilter');
+                
+                this.init();
+            }
+            
+            init() {
+                this.renderProducts();
+                
+                // 添加事件监听
+                this.addProductBtn.addEventListener('click', () => this.showAddProductForm());
+                this.categoryFilter.addEventListener('change', () => this.renderProducts());
+            }
+            
+            renderProducts() {
+                const products = getStorageData(StorageKeys.SECONDHAND);
+                const categoryFilter = this.categoryFilter.value;
+                
+                // 过滤
+                let filteredProducts = products;
+                
+                if (categoryFilter !== 'all') {
+                    filteredProducts = filteredProducts.filter(product => product.category === categoryFilter);
+                }
+                
+                // 按时间倒序排序
+                filteredProducts.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // 清空列表
+                this.productList.innerHTML = '';
+                
+                if (filteredProducts.length === 0) {
+                    this.productList.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1/-1;">
+                            <div class="empty-icon">🛒</div>
+                            <h3>暂无商品</h3>
+                            <p>点击"发布商品"按钮添加第一个二手商品</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 渲染商品列表
+                filteredProducts.forEach(product => {
+                    // 分类映射
+                    const categoryMap = {
+                        'book': '书籍资料',
+                        'electronic': '电子产品',
+                        'daily': '生活用品',
+                        'clothing': '服装鞋帽',
+                        'other': '其他'
+                    };
+                    
+                    const productElement = document.createElement('div');
+                    productElement.className = 'product-card card';
+                    productElement.innerHTML = `
+                        <div class="product-img">${product.image || '📦'}</div>
+                        <div class="product-body">
+                            <div class="product-category">${categoryMap[product.category] || product.category}</div>
+                            <div class="product-title">${product.name}</div>
+                            <div class="product-price">¥${product.price}</div>
+                            <div class="product-desc">${product.description}</div>
+                            <div class="contact-info">卖家：${product.contact}</div>
+                            <div style="font-size: 0.85rem; color: #999; margin-top: 10px;">发布时间：${product.date}</div>
+                        </div>
+                    `;
+                    
+                    this.productList.appendChild(productElement);
+                });
+            }
+            
+            showAddProductForm() {
+                const modalTitle = document.getElementById('modalTitle');
+                const modalBody = document.getElementById('modalBody');
+                const modalOverlay = document.getElementById('modalOverlay');
+                
+                modalTitle.textContent = '发布二手商品';
+                modalBody.innerHTML = `
+                    <form id="productForm">
+                        <div class="form-group">
+                            <label for="productName" class="form-label">商品名称</label>
+                            <input type="text" id="productName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice" class="form-label">价格（元）</label>
+                            <input type="number" id="productPrice" class="form-control" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productCategory" class="form-label">商品分类</label>
+                            <select id="productCategory" class="form-control" required>
+                                <option value="">请选择分类</option>
+                                <option value="book">书籍资料</option>
+                                <option value="electronic">电子产品</option>
+                                <option value="daily">生活用品</option>
+                                <option value="clothing">服装鞋帽</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription" class="form-label">商品描述</label>
+                            <textarea id="productDescription" class="form-control" required placeholder="请描述商品的新旧程度、功能状况等"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productContact" class="form-label">联系方式</label>
+                            <input type="text" id="productContact" class="form-control" required placeholder="电话/微信/QQ等">
+                        </div>
+                        <div class="form-group">
+                            <label for="productImage" class="form-label">商品图片（占位符）</label>
+                            <select id="productImage" class="form-control">
+                                <option value="📚">书籍：📚</option>
+                                <option value="💻">电脑：💻</option>
+                                <option value="📱">手机：📱</option>
+                                <option value="⌨️">键盘：⌨️</option>
+                                <option value="🎧">耳机：🎧</option>
+                                <option value="👕">衣物：👕</option>
+                                <option value="👟">鞋子：👟</option>
+                                <option value="💡">台灯：💡</option>
+                                <option value="📦">其他：📦</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" class="btn btn-secondary" id="cancelProduct">取消</button>
+                            <button type="submit" class="btn btn-primary">发布商品</button>
+                        </div>
+                    </form>
+                `;
+                
+                modalOverlay.style.display = 'flex';
+                
+                // 表单提交事件
+                document.getElementById('productForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addProduct();
+                });
+                
+                // 取消按钮事件
+                document.getElementById('cancelProduct').addEventListener('click', () => {
+                    modalOverlay.style.display = 'none';
+                });
+            }
+            
+            addProduct() {
+                const productName = document.getElementById('productName').value;
+                const productPrice = parseFloat(document.getElementById('productPrice').value);
+                const productCategory = document.getElementById('productCategory').value;
+                const productDescription = document.getElementById('productDescription').value;
+                const productContact = document.getElementById('productContact').value;
+                const productImage = document.getElementById('productImage').value;
+                
+                if (!productName || !productPrice || !productCategory || !productDescription || !productContact) {
+                    alert('请填写所有必填字段');
+                    return;
+                }
+                
+                if (productPrice <= 0) {
+                    alert('价格必须大于0');
+                    return;
+                }
+                
+                // 获取现有数据
+                const products = getStorageData(StorageKeys.SECONDHAND);
+                
+                // 创建新商品
+                const newProduct = {
+                    id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
+                    name: productName,
+                    price: productPrice,
+                    category: productCategory,
+                    description: productDescription,
+                    contact: productContact,
+                    image: productImage,
+                    date: new Date().toLocaleDateString('zh-CN')
+                };
+                
+                // 添加到数组并保存
+                products.unshift(newProduct);
+                saveStorageData(StorageKeys.SECONDHAND, products);
+                
+                // 关闭模态框
+                document.getElementById('modalOverlay').style.display = 'none';
+                
+                // 重新渲染列表
+                this.renderProducts();
+            }
+        }
+
+        // 课表查询模块
+        class TimetableModule {
+            constructor() {
+                this.timetableContent = document.getElementById('timetableContent');
+                this.searchTimetableBtn = document.getElementById('searchTimetable');
+                this.prevWeekBtn = document.getElementById('prevWeek');
+                this.nextWeekBtn = document.getElementById('nextWeek');
+                this.currentWeekBtn = document.getElementById('currentWeekBtn');
+                this.currentWeekElement = document.getElementById('currentWeek');
+                this.timetableInfo = document.getElementById('timetableInfo');
+                this.majorSelect = document.getElementById('majorSelect');
+                this.studentIdInput = document.getElementById('studentId');
+                
+                this.currentWeek = parseInt(getStorageData(StorageKeys.CURRENT_WEEK, 1));
+                this.currentMajor = '';
+                
+                this.init();
+            }
+            
+            init() {
+                this.renderTimetable();
+                
+                // 添加事件监听
+                this.searchTimetableBtn.addEventListener('click', () => this.searchTimetable());
+                this.prevWeekBtn.addEventListener('click', () => this.changeWeek(-1));
+                this.nextWeekBtn.addEventListener('click', () => this.changeWeek(1));
+                this.currentWeekBtn.addEventListener('click', () => this.goToCurrentWeek());
+                
+                // 输入框和下拉框联动
+                this.majorSelect.addEventListener('change', () => {
+                    if (this.majorSelect.value) {
+                        this.studentIdInput.value = '';
+                    }
+                });
+                
+                this.studentIdInput.addEventListener('input', () => {
+                    if (this.studentIdInput.value) {
+                        this.majorSelect.value = '';
+                    }
+                });
+            }
+            
+            searchTimetable() {
+                const studentId = this.studentIdInput.value.trim();
+                const major = this.majorSelect.value;
+                
+                if (!studentId && !major) {
+                    alert('请输入学号或选择年级专业');
+                    return;
+                }
+                
+                // 如果有学号，根据学号判断专业（简化逻辑）
+                if (studentId) {
+                    // 模拟根据学号判断专业
+                    if (studentId.startsWith('2021')) {
+                        this.currentMajor = 'cs2021';
+                    } else if (studentId.startsWith('2022')) {
+                        this.currentMajor = 'cs2022';
+                    } else {
+                        this.currentMajor = 'cs2021'; // 默认
+                    }
+                    
+                    this.timetableInfo.textContent = `学号：${studentId}，${this.getMajorName(this.currentMajor)}`;
+                } else if (major) {
+                    this.currentMajor = major;
+                    this.timetableInfo.textContent = this.getMajorName(major);
+                }
+                
+                // 重置为第1周
+                this.currentWeek = 1;
+                saveStorageData(StorageKeys.CURRENT_WEEK, this.currentWeek);
+                
+                this.renderTimetable();
+            }
+            
+            getMajorName(majorKey) {
+                const timetables = getStorageData(StorageKeys.TIMETABLE);
+                return timetables[majorKey] ? timetables[majorKey].name : '未知专业';
+            }
+            
+            changeWeek(change) {
+                const newWeek = this.currentWeek + change;
+                
+                if (newWeek < 1) {
+                    alert('已经是第一周了');
+                    return;
+                }
+                
+                // 检查是否有该周的课表数据
+                const timetables = getStorageData(StorageKeys.TIMETABLE);
+                const majorData = timetables[this.currentMajor];
+                
+                if (majorData && newWeek > majorData.weeks.length) {
+                    alert('没有更多周的课表数据了');
+                    return;
+                }
+                
+                this.currentWeek = newWeek;
+                saveStorageData(StorageKeys.CURRENT_WEEK, this.currentWeek);
+                
+                this.renderTimetable();
+            }
+            
+            goToCurrentWeek() {
+                this.currentWeek = 1;
+                saveStorageData(StorageKeys.CURRENT_WEEK, this.currentWeek);
+                this.renderTimetable();
+            }
+            
+            renderTimetable() {
+                this.currentWeekElement.textContent = `第 ${this.currentWeek} 周课表`;
+                
+                // 如果没有选择专业，显示提示
+                if (!this.currentMajor) {
+                    this.timetableContent.innerHTML = `
+                        <div class="empty-state" style="padding: 40px;">
+                            <div class="empty-icon">📅</div>
+                            <h3>请查询课表</h3>
+                            <p>请输入学号或选择年级专业后点击"查询课表"按钮</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 获取课表数据
+                const timetables = getStorageData(StorageKeys.TIMETABLE);
+                const majorData = timetables[this.currentMajor];
+                
+                if (!majorData) {
+                    this.timetableContent.innerHTML = `
+                        <div class="empty-state" style="padding: 40px;">
+                            <div class="empty-icon">📅</div>
+                            <h3>暂无课表数据</h3>
+                            <p>该年级专业暂无课表数据</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 检查是否有当前周的课表
+                if (this.currentWeek > majorData.weeks.length) {
+                    this.timetableContent.innerHTML = `
+                        <div class="empty-state" style="padding: 40px;">
+                            <div class="empty-icon">📅</div>
+                            <h3>暂无课表数据</h3>
+                            <p>第 ${this.currentWeek} 周暂无课表数据</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 获取当前周的课表
+                const weekTimetable = majorData.weeks[this.currentWeek - 1];
+                
+                // 星期几的名称
+                const weekdays = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+                
+                // 生成课表HTML
+                let timetableHTML = `
+                    <table class="timetable">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                ${weekdays.map(day => `<th>${day}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                // 假设一天最多8节课
+                for (let lesson = 0; lesson < 8; lesson++) {
+                    timetableHTML += `<tr>`;
+                    timetableHTML += `<td>${lesson + 1}-${lesson + 2}节</td>`;
+                    
+                    // 遍历每一天
+                    for (let day = 0; day < 7; day++) {
+                        timetableHTML += `<td>`;
+                        
+                        // 获取该时间段的课程
+                        const dayCourses = weekTimetable[day] || [];
+                        const course = dayCourses.find(c => {
+                            // 简单匹配课程时间，实际应根据课程时间解析
+                            const timeMatch = c.time.match(/(\d+)/);
+                            if (timeMatch) {
+                                const lessonNum = parseInt(timeMatch[1]);
+                                return lessonNum === lesson + 1;
+                            }
+                            return false;
+                        });
+                        
+                        if (course) {
+                            timetableHTML += `
+                                <div class="course-item">
+                                    <div class="course-name">${course.name}</div>
+                                    <div class="course-detail">${course.teacher}</div>
+                                    <div class="course-detail">${course.classroom}</div>
+                                </div>
+                            `;
+                        }
+                        
+                        timetableHTML += `</td>`;
+                    }
+                    
+                    timetableHTML += `</tr>`;
+                }
+                
+                timetableHTML += `
+                        </tbody>
+                    </table>
+                `;
+                
+                this.timetableContent.innerHTML = timetableHTML;
+            }
+        }
+
+        // 主应用类
+        class CampusLifeApp {
+            constructor() {
+                // 初始化数据
+                initializeData();
+                
+                // 初始化模块管理器
+                this.moduleManager = new ModuleManager();
+                
+                // 初始化各功能模块
+                this.noticesModule = new NoticesModule();
+                this.lostFoundModule = new LostFoundModule();
+                this.secondhandModule = new SecondhandModule();
+                this.timetableModule = new TimetableModule();
+                
+                // 初始化模态框关闭功能
+                this.initModal();
+                
+                console.log('校园生活助手已初始化');
+            }
+            
+            initModal() {
+                const modalOverlay = document.getElementById('modalOverlay');
+                const closeModalBtn = document.getElementById('closeModal');
+                
+                // 点击关闭按钮关闭模态框
+                closeModalBtn.addEventListener('click', () => {
+                    modalOverlay.style.display = 'none';
+                });
+                
+                // 点击模态框外部关闭模态框
+                modalOverlay.addEventListener('click', (e) => {
+                    if (e.target === modalOverlay) {
+                        modalOverlay.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        // 页面加载完成后初始化应用
+        document.addEventListener('DOMContentLoaded', () => {
+            new CampusLifeApp();
+        });
+    </script>
+</body>
+</html>
